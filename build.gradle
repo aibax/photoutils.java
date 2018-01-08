@@ -27,5 +27,12 @@ mainClassName = 'jp.aibax.photoutils.ExifRenameCommand'
 jar {
     baseName = NAME
     version = VERSION
+
+    manifest {
+        attributes 'Main-Class' : mainClassName
+    }
+
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+
     destinationDir = file('.')
 }
