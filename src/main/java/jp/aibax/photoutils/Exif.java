@@ -9,17 +9,17 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.sanselan.ImageReadException;
-import org.apache.sanselan.Sanselan;
-import org.apache.sanselan.common.IImageMetadata;
-import org.apache.sanselan.formats.jpeg.JpegImageMetadata;
-import org.apache.sanselan.formats.tiff.TiffField;
-import org.apache.sanselan.formats.tiff.constants.TagInfo;
+import org.apache.commons.imaging.ImageReadException;
+import org.apache.commons.imaging.Imaging;
+import org.apache.commons.imaging.common.IImageMetadata;
+import org.apache.commons.imaging.formats.jpeg.JpegImageMetadata;
+import org.apache.commons.imaging.formats.tiff.TiffField;
+import org.apache.commons.imaging.formats.tiff.taginfos.TagInfo;
 
+import static org.apache.commons.imaging.formats.tiff.constants.ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL;
+import static org.apache.commons.imaging.formats.tiff.constants.TiffTagConstants.TIFF_TAG_MAKE;
+import static org.apache.commons.imaging.formats.tiff.constants.TiffTagConstants.TIFF_TAG_MODEL;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.apache.sanselan.formats.tiff.constants.ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL;
-import static org.apache.sanselan.formats.tiff.constants.TiffTagConstants.TIFF_TAG_MAKE;
-import static org.apache.sanselan.formats.tiff.constants.TiffTagConstants.TIFF_TAG_MODEL;
 
 public class Exif
 {
@@ -72,7 +72,7 @@ public class Exif
         exif.file = file;
 
         /* EXIFデータの取得 */
-        IImageMetadata imageMetadata = Sanselan.getMetadata(file.toFile());
+        IImageMetadata imageMetadata = Imaging.getMetadata(file.toFile());
 
         if (imageMetadata == null)
         {

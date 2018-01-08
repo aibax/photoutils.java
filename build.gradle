@@ -15,7 +15,7 @@ repositories {
 
 dependencies {
     compile 'org.apache.commons:commons-lang3:3.7'
-    compile 'org.apache.sanselan:sanselan:0.97-incubator'
+    compile files('lib/commons-imaging-1.0-RC7.jar')
     compile 'args4j:args4j:2.33'
     testCompile 'junit:junit:4.12'
 }

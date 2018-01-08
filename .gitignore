@@ -116,3 +116,4 @@ modules.xml
 # --------------------------------------------------------------------------------
 
 # Your application settings goes here.
+!lib/*.jar

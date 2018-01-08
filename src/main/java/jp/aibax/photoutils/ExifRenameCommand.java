@@ -24,7 +24,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class ExifRenameCommand
 {
-    private static final String VERSION = "exifrename version 1.0.0-SNAPSHOT";
+    private static final String VERSION = "exifrename version 1.0.0-SNAPSHOT (using Apache Commons Imaging 1.0 RC7)";
 
     private static final DateFormat DEFAULT_TIMESTAMP_FORMAT = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
