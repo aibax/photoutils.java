@@ -22,7 +22,7 @@ dependencies {
 
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
-mainClassName = 'App'
+mainClassName = 'jp.aibax.photoutils.ExifRenameCommand'
 
 jar {
     baseName = NAME
