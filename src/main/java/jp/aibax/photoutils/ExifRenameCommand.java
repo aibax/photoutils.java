@@ -153,11 +153,12 @@ public class ExifRenameCommand
             return;
         }
 
+        Path _target = target.toRealPath();
         int _counterLength = (counterLength > 0) ? counterLength : 0;
         String _prefix = (prefix != null) ? prefix : "";
         String _suffix = (suffix != null) ? suffix : "";
 
-        _renameFile(target, _counterLength, addModel, _prefix, _suffix, extension, dryrun);
+        _renameFile(_target, _counterLength, addModel, _prefix, _suffix, extension, dryrun);
     }
 
     private void _renameFile(Path target, int counterLength, boolean addModel, String prefix, String suffix,
