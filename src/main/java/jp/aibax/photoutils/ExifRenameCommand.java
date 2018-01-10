@@ -33,7 +33,7 @@ public class ExifRenameCommand
         Uppercase, Lowercase
     }
 
-    @Option(name = "-h", aliases = "--help", help = true, usage = "このメッセージを表示します")
+    @Option(name = "-?", aliases = "--help", help = true, usage = "このメッセージを表示します")
     private Boolean usageFlag;
 
     @Option(name = "-v", aliases = "--version", usage = "バージョンを表示します")
@@ -57,7 +57,7 @@ public class ExifRenameCommand
     @Option(name = "-E", aliases = "--uppercase-extension", usage = "拡張子を大文字に変換する")
     private Boolean uppercaseExtension;
 
-    @Option(name = "-d", aliases = "--dry-run", usage = "実際に実行せずに実行結果を表示する")
+    @Option(name = "--dry-run", usage = "実際に実行せずに実行結果を表示する")
     private Boolean dryrunFlag;
 
     @Argument(metaVar = "arguments...", handler = StringArrayOptionHandler.class)
