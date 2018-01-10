@@ -57,10 +57,10 @@ public class ExifRenameCommand
     private String suffix;
 
     @Option(name = "-e", aliases = "--lowercase-extension", usage = "拡張子を小文字に変換する")
-    private Boolean lowercaseExtension;
+    private Boolean lowercaseExtensionFlag;
 
     @Option(name = "-E", aliases = "--uppercase-extension", usage = "拡張子を大文字に変換する")
-    private Boolean uppercaseExtension;
+    private Boolean uppercaseExtensionFlag;
 
     @Option(name = "--dry-run", usage = "実際に実行せずに実行結果を表示する")
     private Boolean dryrunFlag;
@@ -103,8 +103,8 @@ public class ExifRenameCommand
         boolean addModel = isTrue(command.modelFlag);
         String prefix = command.prefix;
         String suffix = command.suffix;
-        boolean lowercaseExtension = isTrue(command.lowercaseExtension);
-        boolean uppercaseExtension = isTrue(command.uppercaseExtension);
+        boolean lowercaseExtension = isTrue(command.lowercaseExtensionFlag);
+        boolean uppercaseExtension = isTrue(command.uppercaseExtensionFlag);
         TextCase textCase = uppercaseExtension ? TextCase.Uppercase : lowercaseExtension ? TextCase.Lowercase : null;
         boolean dryrun = isTrue(command.dryrunFlag);
 
