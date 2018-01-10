@@ -28,6 +28,8 @@ public class ExifRenameCommand
 
     private static final DateFormat DEFAULT_TIMESTAMP_FORMAT = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
+    private static final DateFormat MILLISECOND_TIMESTAMP_FORMAT = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
+
     private enum TextCase
     {
         Uppercase, Lowercase
@@ -38,6 +40,9 @@ public class ExifRenameCommand
 
     @Option(name = "-v", aliases = "--version", usage = "バージョンを表示します")
     private Boolean versionFlag;
+
+    @Option(name = "-ms", aliases = "--enable-millisecond", usage = "ファイル名の時刻にミリ秒を含める")
+    private Boolean enableMillisecondFlag;
 
     @Option(name = "-c", aliases = "--counter-length", usage = "カウンタ部分の桁数")
     private int counterLength = 2;
@@ -93,6 +98,7 @@ public class ExifRenameCommand
             return;
         }
 
+        boolean enableMillisecond = isTrue(command.enableMillisecondFlag);
         int counterLength = command.counterLength;
         boolean addModel = isTrue(command.modelFlag);
         String prefix = command.prefix;
@@ -108,7 +114,7 @@ public class ExifRenameCommand
 
             try
             {
-                command.rename(target, counterLength, addModel, prefix, suffix, textCase, dryrun);
+                command.rename(target, enableMillisecond, counterLength, addModel, prefix, suffix, textCase, dryrun);
             }
             catch (Exception e)
             {
@@ -118,8 +124,8 @@ public class ExifRenameCommand
         });
     }
 
-    public void rename(Path target, int counterLength, boolean addModel, String prefix, String suffix,
-        TextCase extension, boolean dryrun) throws IOException
+    public void rename(Path target, boolean enableMillisecond, int counterLength, boolean addModel, String prefix,
+        String suffix, TextCase extension, boolean dryrun) throws IOException
     {
         if (target == null)
         {
@@ -146,7 +152,7 @@ public class ExifRenameCommand
             {
                 for (Path file : directoryStream)
                 {
-                    rename(file, counterLength, addModel, prefix, suffix, extension, dryrun);
+                    rename(file, enableMillisecond, counterLength, addModel, prefix, suffix, extension, dryrun);
                 }
             }
 
@@ -158,11 +164,11 @@ public class ExifRenameCommand
         String _prefix = (prefix != null) ? prefix : "";
         String _suffix = (suffix != null) ? suffix : "";
 
-        _renameFile(_target, _counterLength, addModel, _prefix, _suffix, extension, dryrun);
+        _renameFile(_target, enableMillisecond, _counterLength, addModel, _prefix, _suffix, extension, dryrun);
     }
 
-    private void _renameFile(Path target, int counterLength, boolean addModel, String prefix, String suffix,
-        TextCase extension, boolean dryrun) throws IOException
+    private void _renameFile(Path target, boolean enableMillisecond, int counterLength, boolean addModel, String prefix,
+        String suffix, TextCase extension, boolean dryrun) throws IOException
     {
         Exif exif = Exif.decode(target);
 
@@ -212,23 +218,31 @@ public class ExifRenameCommand
             Files.move(target, tmpfile);
         }
 
-        Path newfile = null;
+        /* タイムスタンプ */
+        DateFormat dateFormat = enableMillisecond ? MILLISECOND_TIMESTAMP_FORMAT : DEFAULT_TIMESTAMP_FORMAT;
+        String timestamp = dateFormat.format(dateTimeOriginal);
 
         /* 連番 */
         NumberFormat counterFormat = NumberFormat.getIntegerInstance();
         counterFormat.setGroupingUsed(false);
         counterFormat.setMinimumIntegerDigits(counterLength);
 
-        for (int i = 0; ; i++)
+        int count = 0;
+        String counter = (counterLength > 0) ? counterFormat.format(count) : null;
+        String newname = buildFilename(timestamp, model, counter, prefix, suffix, ext);
+        Path newfile = target.getParent().resolve(newname);
+
+        while (true)
         {
-            String newname = buildFilename(dateTimeOriginal, model, counterFormat.format(i), prefix, suffix, ext);
-
-            newfile = target.getParent().resolve(newname);
-
             if (!Files.exists(newfile))
             {
                 break;
             }
+
+            count++;
+            counter = counterFormat.format(count);
+            newname = buildFilename(timestamp, model, counter, prefix, suffix, ext);
+            newfile = target.getParent().resolve(newname);
         }
 
         System.out.printf("[RENAME] %s => %s\n", target.getFileName(), newfile.getFileName());
@@ -251,7 +265,8 @@ public class ExifRenameCommand
         return (index > 0) ? filename.substring(index) : "";
     }
 
-    private String buildFilename(Date timestamp, String model, String counter, String prefix, String suffix, String ext)
+    private String buildFilename(String timestamp, String model, String counter, String prefix, String suffix,
+        String ext)
     {
         StringBuilder filename = new StringBuilder();
 
@@ -262,7 +277,7 @@ public class ExifRenameCommand
 
         if (timestamp != null)
         {
-            filename.append(DEFAULT_TIMESTAMP_FORMAT.format(timestamp));
+            filename.append(timestamp);
         }
 
         if (isNotEmpty(model))
