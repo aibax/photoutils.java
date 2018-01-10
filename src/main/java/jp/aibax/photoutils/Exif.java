@@ -17,9 +17,11 @@ import org.apache.commons.imaging.formats.tiff.TiffField;
 import org.apache.commons.imaging.formats.tiff.taginfos.TagInfo;
 
 import static org.apache.commons.imaging.formats.tiff.constants.ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL;
+import static org.apache.commons.imaging.formats.tiff.constants.ExifTagConstants.EXIF_TAG_SUB_SEC_TIME_ORIGINAL;
 import static org.apache.commons.imaging.formats.tiff.constants.TiffTagConstants.TIFF_TAG_MAKE;
 import static org.apache.commons.imaging.formats.tiff.constants.TiffTagConstants.TIFF_TAG_MODEL;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.time.DateUtils.setMilliseconds;
 
 public class Exif
 {
@@ -34,6 +36,8 @@ public class Exif
     private String model = null;
 
     private Date dateTimeOriginal = null;
+
+    private Integer subSecTimeOriginal = null;
 
     private Exif()
     {
@@ -92,6 +96,12 @@ public class Exif
         exif.make = readMetadataAsString(jpegImageMetadata, TIFF_TAG_MAKE);
         exif.model = readMetadataAsString(jpegImageMetadata, TIFF_TAG_MODEL);
         exif.dateTimeOriginal = readMetadataAsDate(jpegImageMetadata, EXIF_TAG_DATE_TIME_ORIGINAL);
+        exif.subSecTimeOriginal = readMetadataAsInteger(jpegImageMetadata, EXIF_TAG_SUB_SEC_TIME_ORIGINAL);
+
+        if ((exif.dateTimeOriginal != null) && (exif.subSecTimeOriginal != null))
+        {
+            exif.dateTimeOriginal = setMilliseconds(exif.dateTimeOriginal, exif.subSecTimeOriginal);
+        }
 
         exif.lastModified = new Date(Files.getLastModifiedTime(file).toMillis());
 
@@ -134,6 +144,25 @@ public class Exif
         }
     }
 
+    private static Integer readMetadataAsInteger(final JpegImageMetadata jpegImageMetadata, final TagInfo tagInfo)
+    {
+        String stringValue = readMetadataAsString(jpegImageMetadata, tagInfo);
+
+        if (isEmpty(stringValue))
+        {
+            return null;
+        }
+
+        try
+        {
+            return Integer.parseInt(stringValue);
+        }
+        catch (NumberFormatException e)
+        {
+            throw new RuntimeException("Could not parse to Integer. ('" + stringValue + "')", e);
+        }
+    }
+
     private static Date readMetadataAsDate(final JpegImageMetadata jpegImageMetadata, final TagInfo tagInfo)
     {
         String stringValue = readMetadataAsString(jpegImageMetadata, tagInfo);
@@ -168,6 +197,11 @@ public class Exif
         return this.dateTimeOriginal;
     }
 
+    public Integer getSubSecTimeOriginal()
+    {
+        return this.subSecTimeOriginal;
+    }
+
     public Date getLastModified()
     {
         return this.lastModified;
@@ -183,6 +217,7 @@ public class Exif
         s.append("Model: ").append(model).append(nl);
         s.append("DateTimeOriginal: ")
             .append((dateTimeOriginal != null) ? EXIF_DATE_FORMAT.format(dateTimeOriginal) : "").append(nl);
+        s.append("SubSecTimeOriginal: ").append(subSecTimeOriginal).append(nl);
         s.append("LastModified: ").append((lastModified != null) ? EXIF_DATE_FORMAT.format(lastModified) : "")
             .append(nl);
 
