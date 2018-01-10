@@ -149,7 +149,7 @@ public class Exif
         }
         catch (ParseException e)
         {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Could not parse to Date. ('" + stringValue + "')", e);
         }
     }
 
