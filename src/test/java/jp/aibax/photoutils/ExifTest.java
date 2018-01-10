@@ -14,7 +14,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-public class ExifRenameCommandTest
+public class ExifTest
 {
     @Test
     public void testFileExists()
