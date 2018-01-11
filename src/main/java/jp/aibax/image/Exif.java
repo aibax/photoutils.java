@@ -1,4 +1,4 @@
-package jp.aibax.photoutils;
+package jp.aibax.image;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

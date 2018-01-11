@@ -9,6 +9,8 @@ import java.util.GregorianCalendar;
 
 import org.junit.Test;
 
+import jp.aibax.image.Exif;
+
 import static java.util.Calendar.MILLISECOND;
 import static java.util.Calendar.OCTOBER;
 import static org.junit.Assert.assertEquals;

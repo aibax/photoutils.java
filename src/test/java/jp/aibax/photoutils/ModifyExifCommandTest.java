@@ -15,6 +15,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import jp.aibax.image.Exif;
+
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static java.util.Calendar.DATE;
 import static java.util.Calendar.HOUR;

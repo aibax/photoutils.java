@@ -32,6 +32,8 @@ import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 import org.kohsuke.args4j.spi.StringArrayOptionHandler;
 
+import jp.aibax.image.Exif;
+
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static java.util.Calendar.MILLISECOND;
 import static java.util.Calendar.SECOND;
