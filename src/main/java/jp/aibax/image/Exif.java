@@ -43,6 +43,13 @@ public class Exif
     {
     }
 
+    /**
+     * 指定した画像のEXIFデータを読み込みます
+     *
+     * @param file EXIFデータを読み込む画像ファイルのパス
+     * @return EXIFデータ
+     * @throws IOException
+     */
     public static Exif decode(Path file) throws IOException
     {
         if (file == null)
@@ -182,31 +189,57 @@ public class Exif
         }
     }
 
+    /**
+     * 'Make' タグのデータを返します
+     *
+     * @return 'Make' タグのデータ（タグがない場合はnull）
+     */
     public String getMake()
     {
         return this.make;
     }
 
+    /**
+     * 'Model' タグのデータを返します
+     *
+     * @return 'Model' タグのデータ（タグがない場合はnull）
+     */
     public String getModel()
     {
         return this.model;
     }
 
+    /**
+     * 'DateTimeOriginal' タグのデータを返します
+     *
+     * @return 'DateTimeOriginal' タグのデータ（タグがない場合はnull）
+     */
     public Date getDateTimeOriginal()
     {
         return this.dateTimeOriginal;
     }
 
+    /**
+     * 'SubSecTimeOriginal' タグのデータを返します
+     *
+     * @return 'SubSecTimeOriginal' タグのデータ（タグがない場合はnull）
+     */
     public Integer getSubSecTimeOriginal()
     {
         return this.subSecTimeOriginal;
     }
 
+    /**
+     * 画像ファイルの更新時刻を返します
+     *
+     * @return 画像ファイルの更新時刻
+     */
     public Date getLastModified()
     {
         return this.lastModified;
     }
 
+    @Override
     public String toString()
     {
         String nl = "\n";
