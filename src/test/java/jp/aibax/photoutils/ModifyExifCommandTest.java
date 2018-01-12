@@ -61,7 +61,7 @@ public class ModifyExifCommandTest
     @Test
     public void testFileExists()
     {
-        Path path = Paths.get("./testdata/sample.jpg");
+        Path path = Paths.get("./testdata/sample_exif.jpg");
         assertTrue(path.toFile().exists());
     }
 
@@ -121,7 +121,7 @@ public class ModifyExifCommandTest
     @Test
     public void testRemoveDateTimeOriginal()
     {
-        Path original = Paths.get("./testdata/sample.jpg");
+        Path original = Paths.get("./testdata/sample_exif.jpg");
 
         ModifyExifCommand command = new ModifyExifCommand();
 
@@ -167,7 +167,7 @@ public class ModifyExifCommandTest
     @Test
     public void testModifyDateTimeOriginal_SubSecTimeOriginalIsNotDefined()
     {
-        Path original = Paths.get("./testdata/sample.jpg");
+        Path original = Paths.get("./testdata/sample_exif.jpg");
 
         ModifyExifCommand command = new ModifyExifCommand();
 
@@ -215,7 +215,7 @@ public class ModifyExifCommandTest
     @Test
     public void testModifyDateTimeOriginal_SubSecTimeOriginalIsZero()
     {
-        Path original = Paths.get("./testdata/sample.jpg");
+        Path original = Paths.get("./testdata/sample_exif.jpg");
 
         ModifyExifCommand command = new ModifyExifCommand();
 
@@ -264,7 +264,7 @@ public class ModifyExifCommandTest
     @Test
     public void testModifyDateTimeOriginal()
     {
-        Path original = Paths.get("./testdata/sample.jpg");
+        Path original = Paths.get("./testdata/sample_exif.jpg");
 
         ModifyExifCommand command = new ModifyExifCommand();
 
@@ -312,7 +312,7 @@ public class ModifyExifCommandTest
     @Test
     public void testAddDays()
     {
-        Path original = Paths.get("./testdata/sample.jpg");
+        Path original = Paths.get("./testdata/sample_exif.jpg");
 
         ModifyExifCommand command = new ModifyExifCommand();
 
@@ -358,7 +358,7 @@ public class ModifyExifCommandTest
     @Test
     public void testAddHours()
     {
-        Path original = Paths.get("./testdata/sample.jpg");
+        Path original = Paths.get("./testdata/sample_exif.jpg");
 
         ModifyExifCommand command = new ModifyExifCommand();
 
@@ -404,7 +404,7 @@ public class ModifyExifCommandTest
     @Test
     public void testAddMinutes()
     {
-        Path original = Paths.get("./testdata/sample.jpg");
+        Path original = Paths.get("./testdata/sample_exif.jpg");
 
         ModifyExifCommand command = new ModifyExifCommand();
 
@@ -450,7 +450,7 @@ public class ModifyExifCommandTest
     @Test
     public void testAddSeconds()
     {
-        Path original = Paths.get("./testdata/sample.jpg");
+        Path original = Paths.get("./testdata/sample_exif.jpg");
 
         ModifyExifCommand command = new ModifyExifCommand();
 

@@ -23,7 +23,7 @@ public class ExifTest
     @Test
     public void testFileExists()
     {
-        Path path = Paths.get("./testdata/sample.jpg");
+        Path path = Paths.get("./testdata/sample_exif.jpg");
         assertTrue(path.toFile().exists());
     }
 
@@ -45,7 +45,7 @@ public class ExifTest
     @Test
     public void testDecode()
     {
-        Path path = Paths.get("./testdata/sample.jpg");
+        Path path = Paths.get("./testdata/sample_exif.jpg");
 
         try
         {
@@ -71,7 +71,7 @@ public class ExifTest
     @Test
     public void testToString()
     {
-        Path path = Paths.get("./testdata/sample.jpg");
+        Path path = Paths.get("./testdata/sample_exif.jpg");
 
         try
         {
@@ -79,7 +79,7 @@ public class ExifTest
             System.out.println(exif.toString());
 
             assertTrue(exif.toString().length() > 0);
-            assertTrue(exif.toString().startsWith("[sample.jpg]"));
+            assertTrue(exif.toString().startsWith("[sample_exif.jpg]"));
         }
         catch (IOException e)
         {
