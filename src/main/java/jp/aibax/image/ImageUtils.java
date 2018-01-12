@@ -287,4 +287,124 @@ public class ImageUtils
             return outputStream.toByteArray();
         }
     }
+
+    /**
+     * 画像を指定されたアスペクト比（縦横比）でトリミングします
+     *
+     * @param file        トリミングする画像ファイル
+     * @param aspectRatio アスペクト比（幅/高さ） 例) 1:1 = 1 / 4:3 = 1.33 / 16:9 = 1.78
+     * @return リサイズされた画像
+     * @throws UnsupportedImageFormatException 非対応の画像形式
+     * @throws IOException
+     */
+    public static byte[] trim(Path file, float aspectRatio) throws UnsupportedImageFormatException, IOException
+    {
+        return trim(_validateAndReadAllBytes(file), aspectRatio);
+    }
+
+    /**
+     * 画像を指定されたアスペクト比（縦横比）でトリミングします
+     *
+     * @param image       トリミングする画像のデータ
+     * @param aspectRatio アスペクト比（幅/高さ） 例) 1:1 = 1 / 4:3 = 1.33 / 16:9 = 1.78
+     * @return トリミングされた画像
+     * @throws UnsupportedImageFormatException 非対応の画像形式
+     * @throws IOException
+     */
+    public static byte[] trim(byte[] image, float aspectRatio) throws UnsupportedImageFormatException, IOException
+    {
+        if ((image == null) || (image.length == 0) || (aspectRatio < 0))
+        {
+            throw new IllegalArgumentException();
+        }
+
+        ImageFormat imageFormat = ImageUtils.getImageFormat(image);
+
+        if (imageFormat == null)
+        {
+            throw new UnsupportedImageFormatException("Unsupported image format.");
+        }
+
+        BufferedImage sourceImage = readImage(image);
+
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream())
+        {
+            int width = sourceImage.getWidth();
+            int height = sourceImage.getHeight();
+            int x = 0;
+            int y = 0;
+
+            float sourceAspectRatio = (float)width / (float)height;
+
+            if (sourceAspectRatio == aspectRatio)
+            {
+                /* アスペクト比が一致 */
+                return image;
+            }
+
+            if (sourceAspectRatio > aspectRatio)
+            {
+                /* 元画像のアスペクト比の方が大きい（元画像の方が横長） → 元画像の高さを基準に幅を計算 */
+
+                /*
+                 * [計算例]
+                 * 元画像のサイズ 1920x1080 → アスペクト比 16:9 = 1.78
+                 * トリミングするアスペクト比 4:3 = 1.33
+                 * トリミング後の画像の幅 1080 x (4/3) = 1440
+                 */
+
+                width = Math.round(height * aspectRatio);
+
+                x = Math.round((float)(sourceImage.getWidth() - width) / 2);
+            }
+            else
+            {
+                /* 元画像のアスペクト比の方が小さい（元画像の方が縦長） → 元画像の幅を基準に幅を計算 */
+
+                /*
+                 * [計算例]
+                 * 元画像のサイズ 1440x1080 → アスペクト比 4:3 = 1.33
+                 * トリミングするアスペクト比 16:9 = 1.78
+                 * トリミング後の画像の高さ 1440 / (16/9) = 810
+                 */
+
+                height = Math.round(width / aspectRatio);
+
+                y = Math.round((float)(sourceImage.getHeight() - height) / 2);
+            }
+
+            /* 画像のトリミング */
+            BufferedImage squaredImage = sourceImage.getSubimage(x, y, width, height);
+
+            ImageIO.write(squaredImage, imageFormat.getName(), outputStream);
+
+            return outputStream.toByteArray();
+        }
+    }
+
+    /**
+     * 画像を正方形にトリミングします
+     *
+     * @param file トリミングする画像ファイル
+     * @return トリミングされた画像
+     * @throws UnsupportedImageFormatException 非対応の画像形式
+     * @throws IOException
+     */
+    public static byte[] square(Path file) throws UnsupportedImageFormatException, IOException
+    {
+        return trim(file, 1);
+    }
+
+    /**
+     * 画像を正方形にトリミングします
+     *
+     * @param image トリミングする画像のデータ
+     * @return トリミングされた画像
+     * @throws UnsupportedImageFormatException 非対応の画像形式
+     * @throws IOException
+     */
+    public static byte[] square(byte[] image) throws UnsupportedImageFormatException, IOException
+    {
+        return trim(image, 1);
+    }
 }
