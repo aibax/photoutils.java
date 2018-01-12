@@ -28,9 +28,9 @@ public class ExifRenameCommand
 {
     private static final String VERSION = "exifrename version 1.0.0-SNAPSHOT (using Apache Commons Imaging 1.0 RC7)";
 
-    private static final DateFormat DEFAULT_TIMESTAMP_FORMAT = new SimpleDateFormat("yyyyMMdd_HHmmss");
+    private static final DateFormat TIMESTAMP_FORMAT = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
-    private static final DateFormat MILLISECOND_TIMESTAMP_FORMAT = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
+    private static final DateFormat MILLISECOND_FORMAT = new SimpleDateFormat("_SSS");
 
     private enum TextCase
     {
@@ -221,8 +221,12 @@ public class ExifRenameCommand
         }
 
         /* タイムスタンプ */
-        DateFormat dateFormat = enableMillisecond ? MILLISECOND_TIMESTAMP_FORMAT : DEFAULT_TIMESTAMP_FORMAT;
-        String timestamp = dateFormat.format(dateTimeOriginal);
+        String timestamp = TIMESTAMP_FORMAT.format(dateTimeOriginal);
+
+        if (enableMillisecond)
+        {
+            timestamp += MILLISECOND_FORMAT.format(dateTimeOriginal);
+        }
 
         /* 連番 */
         NumberFormat counterFormat = NumberFormat.getIntegerInstance();
@@ -230,7 +234,9 @@ public class ExifRenameCommand
         counterFormat.setMinimumIntegerDigits(counterLength);
 
         int count = 0;
-        String counter = (counterLength > 0) ? counterFormat.format(count) : null;
+        String counterPrefix = enableMillisecond ? "" : "_";
+
+        String counter = (counterLength > 0) ? (counterPrefix + counterFormat.format(count)) : null;
         String newname = buildFilename(timestamp, counter, model, prefix, suffix, ext);
         Path newfile = target.getParent().resolve(newname);
 
@@ -242,7 +248,7 @@ public class ExifRenameCommand
             }
 
             count++;
-            counter = counterFormat.format(count);
+            counter = counterPrefix + counterFormat.format(count);
             newname = buildFilename(timestamp, counter, model, prefix, suffix, ext);
             newfile = target.getParent().resolve(newname);
         }
@@ -284,7 +290,6 @@ public class ExifRenameCommand
 
         if (isNotEmpty(counter))
         {
-            filename.append((filename.length() > 0) ? "_" : "");
             filename.append(counter);
         }
 
