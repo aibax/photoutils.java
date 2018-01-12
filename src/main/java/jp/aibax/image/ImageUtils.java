@@ -1,7 +1,10 @@
 package jp.aibax.image;
 
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,6 +15,9 @@ import java.util.Map;
 import javax.imageio.IIOException;
 import javax.imageio.ImageIO;
 
+import jp.aibax.exception.UnsupportedImageFormatException;
+
+import static java.awt.Image.SCALE_AREA_AVERAGING;
 import static jp.aibax.image.ImageFormat.BMP;
 import static jp.aibax.image.ImageFormat.GIF;
 import static jp.aibax.image.ImageFormat.JPEG;
@@ -153,5 +159,132 @@ public class ImageUtils
         }
 
         return null;
+    }
+
+    /**
+     * 画像を指定された長辺の長さにリサイズします
+     *
+     * @param file             リサイズする画像ファイル
+     * @param lengthOfLongSide リサイズ後の長辺の長さ
+     * @return リサイズされた画像
+     * @throws UnsupportedImageFormatException 非対応の画像形式
+     * @throws IOException
+     */
+    public static byte[] resize(Path file, int lengthOfLongSide) throws UnsupportedImageFormatException, IOException
+    {
+        return resize(_validateAndReadAllBytes(file), lengthOfLongSide);
+    }
+
+    /**
+     * 画像を指定された長辺の長さにリサイズします
+     *
+     * @param image            リサイズする画像データ
+     * @param lengthOfLongSide リサイズ後の長辺の長さ
+     * @return リサイズされた画像
+     * @throws UnsupportedImageFormatException 非対応の画像形式
+     * @throws IOException
+     */
+    public static byte[] resize(byte[] image, int lengthOfLongSide) throws UnsupportedImageFormatException, IOException
+    {
+        if ((image == null) || (image.length == 0))
+        {
+            throw new IllegalArgumentException();
+        }
+
+        ImageFormat imageFormat = ImageUtils.getImageFormat(image);
+
+        if (imageFormat == null)
+        {
+            throw new UnsupportedImageFormatException("Unsupported image format.");
+        }
+
+        BufferedImage sourceImage = readImage(image);
+
+        float aspectRatio = (float)sourceImage.getWidth() / (float)sourceImage.getHeight();
+
+        if (aspectRatio > 1)
+        {
+            /* 横長 */
+            return resize(image, lengthOfLongSide, 0);
+        }
+        else
+        {
+            /* 縦長 */
+            return resize(image, 0, lengthOfLongSide);
+        }
+    }
+
+    /**
+     * 画像を指定された幅と高さにリサイズします
+     *
+     * @param file   リサイズする画像ファイル
+     * @param width  リサイズ後の幅（0の場合は縦横比を維持して自動計算）
+     * @param height リサイズ後の高さ（0の場合は縦横比を維持して自動計算）
+     * @return リサイズされた画像
+     * @throws UnsupportedImageFormatException 非対応の画像形式
+     * @throws IOException
+     */
+    public static byte[] resize(Path file, int width, int height) throws UnsupportedImageFormatException, IOException
+    {
+        return resize(_validateAndReadAllBytes(file), width, height);
+    }
+
+    /**
+     * 画像を指定された幅と高さにリサイズします
+     *
+     * @param image  リサイズする画像データ
+     * @param width  リサイズ後の幅（0の場合は縦横比を維持して自動計算）
+     * @param height リサイズ後の高さ（0の場合は縦横比を維持して自動計算）
+     * @return リサイズされた画像
+     * @throws UnsupportedImageFormatException 非対応の画像形式
+     * @throws IOException
+     */
+    public static byte[] resize(byte[] image, int width, int height) throws UnsupportedImageFormatException, IOException
+    {
+        if ((image == null) || (image.length == 0))
+        {
+            throw new IllegalArgumentException();
+        }
+
+        ImageFormat imageFormat = ImageUtils.getImageFormat(image);
+
+        if (imageFormat == null)
+        {
+            throw new UnsupportedImageFormatException("Unsupported image format.");
+        }
+
+        BufferedImage sourceImage = readImage(image);
+
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream())
+        {
+            width = (0 < width) ? width : -1;
+            height = (0 < height) ? height : -1;
+
+            Image scaledImage = sourceImage.getScaledInstance(width, height, SCALE_AREA_AVERAGING);
+
+            width = scaledImage.getWidth(null);
+            height = scaledImage.getHeight(null);
+
+            BufferedImage resizedImage = new BufferedImage(width, height, sourceImage.getType());
+
+            Graphics g = null;
+
+            try
+            {
+                g = resizedImage.createGraphics();
+                g.drawImage(scaledImage, 0, 0, width, height, null);
+            }
+            finally
+            {
+                if (g != null)
+                {
+                    g.dispose();
+                }
+            }
+
+            ImageIO.write(resizedImage, imageFormat.getName(), outputStream);
+
+            return outputStream.toByteArray();
+        }
     }
 }

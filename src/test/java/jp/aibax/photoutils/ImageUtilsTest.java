@@ -1,10 +1,13 @@
 package jp.aibax.photoutils;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import javax.imageio.IIOException;
+import javax.imageio.ImageIO;
 
 import org.junit.Test;
 
@@ -182,6 +185,213 @@ public class ImageUtilsTest
             assertNotNull(image);
             assertEquals(1920, image.getWidth());
             assertEquals(1080, image.getHeight());
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void testResize_LongSide640_Landscape()
+    {
+        Path original = Paths.get("./testdata/1440x1080.png");
+        assertTrue(Files.exists(original));
+
+        try
+        {
+            byte[] resized = ImageUtils.resize(original, 640);
+
+            try (ByteArrayInputStream inputStream = new ByteArrayInputStream(resized))
+            {
+                BufferedImage resizedImage = ImageIO.read(inputStream);
+
+                assertEquals(640, resizedImage.getWidth());
+                assertEquals(480, resizedImage.getHeight());
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void testResize_LongSide640_Portrait()
+    {
+        Path original = Paths.get("./testdata/1080x1440.png");
+        assertTrue(Files.exists(original));
+
+        try
+        {
+            byte[] resized = ImageUtils.resize(original, 640);
+
+            try (ByteArrayInputStream inputStream = new ByteArrayInputStream(resized))
+            {
+                BufferedImage resizedImage = ImageIO.read(inputStream);
+
+                assertEquals(480, resizedImage.getWidth());
+                assertEquals(640, resizedImage.getHeight());
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void testResize_LongSide640_Square()
+    {
+        Path original = Paths.get("./testdata/1080x1080.png");
+        assertTrue(Files.exists(original));
+
+        try
+        {
+            byte[] resized = ImageUtils.resize(original, 640);
+
+            try (ByteArrayInputStream inputStream = new ByteArrayInputStream(resized))
+            {
+                BufferedImage resizedImage = ImageIO.read(inputStream);
+
+                assertEquals(640, resizedImage.getWidth());
+                assertEquals(640, resizedImage.getHeight());
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void testResize_640x480()
+    {
+        Path original = Paths.get("./testdata/dog.jpg");
+        assertTrue(Files.exists(original));
+
+        try
+        {
+            byte[] resized = ImageUtils.resize(original, 640, 480);
+
+            try (ByteArrayInputStream inputStream = new ByteArrayInputStream(resized))
+            {
+                BufferedImage resizedImage = ImageIO.read(inputStream);
+
+                assertEquals(640, resizedImage.getWidth());
+                assertEquals(480, resizedImage.getHeight());
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void testResize_640x480_CMYK()
+    {
+        Path original = Paths.get("./testdata/dog_cmyk.jpg");
+        assertTrue(Files.exists(original));
+
+        try
+        {
+            byte[] resized = ImageUtils.resize(original, 640, 480);
+
+            try (ByteArrayInputStream inputStream = new ByteArrayInputStream(resized))
+            {
+                BufferedImage resizedImage = ImageIO.read(inputStream);
+
+                assertEquals(640, resizedImage.getWidth());
+                assertEquals(480, resizedImage.getHeight());
+            }
+
+            fail("ImageIOがCMYKカラースペースのJPEGファイルをサポートしたらこのテストが失敗する => CMYKのJPEGの処理でImageIOを使用するように変更");
+        }
+        catch (IIOException e)
+        {
+            /* ImageIO is not supported CMYK color space. */
+            System.out.println("[SKIP] ImageIO is not supported CMYK color space.");
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void testResize_640xAuto()
+    {
+        Path original = Paths.get("./testdata/dog.jpg");
+        assertTrue(Files.exists(original));
+
+        try
+        {
+            byte[] resized = ImageUtils.resize(original, 640, 0);
+
+            try (ByteArrayInputStream inputStream = new ByteArrayInputStream(resized))
+            {
+                BufferedImage resizedImage = ImageIO.read(inputStream);
+
+                assertEquals(640, resizedImage.getWidth());
+                assertEquals(480, resizedImage.getHeight());
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void testResize_Autox480()
+    {
+        Path original = Paths.get("./testdata/dog.jpg");
+        assertTrue(Files.exists(original));
+
+        try
+        {
+            byte[] resized = ImageUtils.resize(original, 0, 480);
+
+            try (ByteArrayInputStream inputStream = new ByteArrayInputStream(resized))
+            {
+                BufferedImage resizedImage = ImageIO.read(inputStream);
+
+                assertEquals(640, resizedImage.getWidth());
+                assertEquals(480, resizedImage.getHeight());
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void testResize_100x100()
+    {
+        Path original = Paths.get("./testdata/dog.jpg");
+        assertTrue(Files.exists(original));
+
+        try
+        {
+            byte[] resized = ImageUtils.resize(original, 100, 100);
+
+            try (ByteArrayInputStream inputStream = new ByteArrayInputStream(resized))
+            {
+                BufferedImage resizedImage = ImageIO.read(inputStream);
+
+                assertEquals(100, resizedImage.getWidth());
+                assertEquals(100, resizedImage.getHeight());
+            }
         }
         catch (IOException e)
         {
