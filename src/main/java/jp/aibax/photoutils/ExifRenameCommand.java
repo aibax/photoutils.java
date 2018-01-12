@@ -231,7 +231,7 @@ public class ExifRenameCommand
 
         int count = 0;
         String counter = (counterLength > 0) ? counterFormat.format(count) : null;
-        String newname = buildFilename(timestamp, model, counter, prefix, suffix, ext);
+        String newname = buildFilename(timestamp, counter, model, prefix, suffix, ext);
         Path newfile = target.getParent().resolve(newname);
 
         while (true)
@@ -243,7 +243,7 @@ public class ExifRenameCommand
 
             count++;
             counter = counterFormat.format(count);
-            newname = buildFilename(timestamp, model, counter, prefix, suffix, ext);
+            newname = buildFilename(timestamp, counter, model, prefix, suffix, ext);
             newfile = target.getParent().resolve(newname);
         }
 
@@ -267,7 +267,7 @@ public class ExifRenameCommand
         return (index > 0) ? filename.substring(index) : "";
     }
 
-    private String buildFilename(String timestamp, String model, String counter, String prefix, String suffix,
+    private String buildFilename(String timestamp, String counter, String model, String prefix, String suffix,
         String ext)
     {
         StringBuilder filename = new StringBuilder();
@@ -282,16 +282,16 @@ public class ExifRenameCommand
             filename.append(timestamp);
         }
 
-        if (isNotEmpty(model))
-        {
-            filename.append((filename.length() > 0) ? "_" : "");
-            filename.append(model);
-        }
-
         if (isNotEmpty(counter))
         {
             filename.append((filename.length() > 0) ? "_" : "");
             filename.append(counter);
+        }
+
+        if (isNotEmpty(model))
+        {
+            filename.append((filename.length() > 0) ? "_" : "");
+            filename.append(model);
         }
 
         if (isNotEmpty(suffix))
