@@ -40,13 +40,11 @@ import static java.util.Calendar.SECOND;
 import static org.apache.commons.imaging.formats.tiff.constants.ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL;
 import static org.apache.commons.imaging.formats.tiff.constants.ExifTagConstants.EXIF_TAG_SUB_SEC_TIME_ORIGINAL;
 import static org.apache.commons.lang3.BooleanUtils.isTrue;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+import static jp.aibax.image.Exif.EXIF_DATE_FORMAT;
 
 public class ModifyExifCommand
 {
     private static final String VERSION = "modexif version 1.0.0-SNAPSHOT (using Apache Commons Imaging 1.0 RC7)";
-
-    private static final DateFormat EXIF_DATE_FORMAT = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
 
     private static final DateFormat YYYYMMDDHHMMSS = new SimpleDateFormat("yyyyMMddHHmmss");
 
