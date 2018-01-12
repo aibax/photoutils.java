@@ -25,7 +25,7 @@ import static org.apache.commons.lang3.time.DateUtils.setMilliseconds;
 
 public class Exif
 {
-    private static final DateFormat EXIF_DATE_FORMAT = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+    public static final DateFormat EXIF_DATE_FORMAT = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
 
     private Path file = null;
 
