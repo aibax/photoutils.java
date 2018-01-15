@@ -36,7 +36,7 @@ public class TrimCommand
     @Option(name = "-r", aliases = "--aspect-ratio", usage = "アスペクト比（ 1:1=1.0 / 4:3=1.33 / 3:4=0.75 / 16:9=1.78 )")
     private String aspectRatio;
 
-    @Option(name = "--dry-run", usage = "実際に実行せずに実行結果を表示する")
+    @Option(name = "--dry-run", usage = "実際に実行せずに実行結果を表示")
     private Boolean dryrunFlag;
 
     @Argument(metaVar = "arguments...", handler = StringArrayOptionHandler.class)
