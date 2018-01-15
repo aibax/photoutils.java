@@ -50,28 +50,28 @@ public class ModifyExifCommand
 
     private static final DateFormat YYYYMMDDHHMMSSSSS = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 
-    @Option(name = "-?", aliases = "--help", help = true, usage = "このメッセージを表示します")
+    @Option(name = "-?", aliases = "--help", help = true, usage = "このメッセージを表示")
     private Boolean usageFlag;
 
-    @Option(name = "-v", aliases = "--version", usage = "バージョンを表示します")
+    @Option(name = "-v", aliases = "--version", usage = "バージョンを表示")
     private Boolean versionFlag;
 
     @Option(name = "-t", aliases = "--datetime", usage = "DateTimeOriginalタグに設定する時刻 ('yyyyMMddHHmmss' または 'yyyyMMddHHmmssSSS' 形式の文字列で指定)")
     private String datetime;
 
-    @Option(name = "-d", aliases = "--add-days", usage = "DateTimeOriginalタグの時刻を指定された日数だけ補正します")
+    @Option(name = "-d", aliases = "--add-days", usage = "DateTimeOriginalタグの時刻を指定された日数だけ補正する")
     private int addDays = 0;
 
-    @Option(name = "-h", aliases = "--add-hours", usage = "DateTimeOriginalタグの時刻を指定された時間だけ補正します")
+    @Option(name = "-h", aliases = "--add-hours", usage = "DateTimeOriginalタグの時刻を指定された時間だけ補正する")
     private int addHours = 0;
 
-    @Option(name = "-m", aliases = "--add-minutes", usage = "DateTimeOriginalタグの時刻を指定された分だけ補正します")
+    @Option(name = "-m", aliases = "--add-minutes", usage = "DateTimeOriginalタグの時刻を指定された分だけ補正する")
     private int addMinutes = 0;
 
-    @Option(name = "-s", aliases = "--add-seconds", usage = "DateTimeOriginalタグの時刻を指定された秒だけ補正します")
+    @Option(name = "-s", aliases = "--add-seconds", usage = "DateTimeOriginalタグの時刻を指定された秒だけ補正する")
     private int addSeconds = 0;
 
-    @Option(name = "--dry-run", usage = "実際に実行せずに実行結果を表示する")
+    @Option(name = "--dry-run", usage = "実際に実行せずに実行結果を表示")
     private Boolean dryrunFlag;
 
     @Argument(metaVar = "arguments...", handler = StringArrayOptionHandler.class)
