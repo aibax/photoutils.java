@@ -37,10 +37,10 @@ public class ExifRenameCommand
         Uppercase, Lowercase
     }
 
-    @Option(name = "-?", aliases = "--help", help = true, usage = "このメッセージを表示します")
+    @Option(name = "-?", aliases = "--help", help = true, usage = "このメッセージを表示")
     private Boolean usageFlag;
 
-    @Option(name = "-v", aliases = "--version", usage = "バージョンを表示します")
+    @Option(name = "-v", aliases = "--version", usage = "バージョンを表示")
     private Boolean versionFlag;
 
     @Option(name = "-ms", aliases = "--enable-millisecond", usage = "ファイル名の時刻にミリ秒を含める")
@@ -49,7 +49,7 @@ public class ExifRenameCommand
     @Option(name = "-c", aliases = "--counter-length", usage = "カウンタ部分の桁数")
     private int counterLength = 2;
 
-    @Option(name = "-m", aliases = "--model", usage = "撮影したカメラの機種名をファイル名に追加する")
+    @Option(name = "-m", aliases = "--model", usage = "撮影したカメラの機種名をファイル名に追加")
     private Boolean modelFlag;
 
     @Option(name = "-p", aliases = "--prefix", usage = "ファイル名の先頭に付与するプレフィックス")
@@ -58,13 +58,13 @@ public class ExifRenameCommand
     @Option(name = "-s", aliases = "--suffix", usage = "ファイル名の末尾に付与するサフィックス")
     private String suffix;
 
-    @Option(name = "-e", aliases = "--lowercase-extension", usage = "拡張子を小文字に変換する")
+    @Option(name = "-e", aliases = "--lowercase-extension", usage = "拡張子を小文字に変換")
     private Boolean lowercaseExtensionFlag;
 
-    @Option(name = "-E", aliases = "--uppercase-extension", usage = "拡張子を大文字に変換する")
+    @Option(name = "-E", aliases = "--uppercase-extension", usage = "拡張子を大文字に変換")
     private Boolean uppercaseExtensionFlag;
 
-    @Option(name = "--dry-run", usage = "実際に実行せずに実行結果を表示する")
+    @Option(name = "--dry-run", usage = "実際に実行せずに実行結果を表示")
     private Boolean dryrunFlag;
 
     @Argument(metaVar = "arguments...", handler = StringArrayOptionHandler.class)
