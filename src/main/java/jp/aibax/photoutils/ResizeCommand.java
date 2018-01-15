@@ -41,7 +41,7 @@ public class ResizeCommand
     @Option(name = "-h", aliases = "--height", usage = "リサイズ後の高さ (px)")
     private int height = 0;
 
-    @Option(name = "--dry-run", usage = "実際に実行せずに実行結果を表示する")
+    @Option(name = "--dry-run", usage = "実際に実行せずに実行結果を表示")
     private Boolean dryrunFlag;
 
     @Argument(metaVar = "arguments...", handler = StringArrayOptionHandler.class)
